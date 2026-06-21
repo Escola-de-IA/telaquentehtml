@@ -1,15 +1,16 @@
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const APP_SHELL_CACHE = `vibecines-app-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `vibecines-runtime-${CACHE_VERSION}`;
+const scopedUrl = (path) => new URL(path, self.registration.scope).toString();
 const APP_SHELL_FILES = [
-  "/",
-  "/index.html",
-  "/manifest.webmanifest",
-  "/favicon.ico",
-  "/logo.png",
-  "/icons/pwa-192x192.png",
-  "/icons/pwa-512x512.png",
-];
+  "./",
+  "index.html",
+  "manifest.webmanifest",
+  "favicon.ico",
+  "logo.png",
+  "icons/pwa-192x192.png",
+  "icons/pwa-512x512.png",
+].map(scopedUrl);
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
@@ -72,7 +73,7 @@ self.addEventListener("fetch", (event) => {
   if (request.headers.has("range") || request.destination === "video") return;
 
   if (request.mode === "navigate") {
-    event.respondWith(networkFirst(request, "/index.html"));
+    event.respondWith(networkFirst(request, scopedUrl("index.html")));
     return;
   }
 
